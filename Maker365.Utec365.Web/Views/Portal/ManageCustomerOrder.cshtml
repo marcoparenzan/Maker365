@@ -1,0 +1,69 @@
+﻿<h1>
+    Manage Customer Order
+</h1>
+<div><span class="label">Customer Name</span> <span class="label label-primary">@ViewBag.partitionKey</span></div>
+<div><span class="label">Reference Name</span> <span class="label label-primary">@ViewBag.modelReferenceName</span></div>
+<div><span class="label">Reference Model</span> <span class="label label-primary"><a href="#" class="button primary">Scarica Modello</a></span></div>
+<div>
+    <input type="tel" id="customer-email" value="@ViewBag.partitionKey" />
+    <input type="tel" id="customer-phone" />
+    <a href="#" class="button default register-customer">Register Customer @ViewBag.partitionKey</a>
+</div>
+
+<div>
+    <input type="tel" id="model-reference-name" value="@ViewBag.modelReferenceName" />
+    <input type="date" id="scheduled-production-date" />
+    <a href="#" class="button default schedule-production">Schedule Production @ViewBag.partitionKey</a>
+</div>
+
+
+@section left {
+    @Html.Partial("_navigation")
+}
+@section right {
+}
+@section scripts {
+    <script type="text/javascript">
+
+        $(function () {
+
+            $(".register-customer").click(function () {
+
+                $.post(
+                    '@Url.Action("RegisterCustomer", "Office365Exchange")'
+                    , {
+                        customerName: '@ViewBag.partitionKey'
+                        ,
+                        customerPhone: $("#customer-phone").val()
+                        ,
+                        customerEMail: $("#customer-email").val()
+                    }, function (result) {
+
+                        alert("Customer registered");
+
+                    }
+                );
+            });
+
+            $(".schedule-production").click(function () {
+                $.post(
+                    '@Url.Action("ScheduleProduction", "Office365Exchange")'
+                    , {
+                        customerName: '@ViewBag.partitionKey'
+                        ,
+                        modelReferenceName: $("#model-reference-name").val()
+                        ,
+                        scheduledProductionDate: $("#scheduled-production-date").val()
+                    }
+                    , function (result) {
+
+                        alert("Production scheduled");
+
+                    }
+                );
+            });
+
+        });
+    </script>
+
+}

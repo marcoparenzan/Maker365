@@ -1,0 +1,41 @@
+﻿<h1>
+    Your orders
+</h1>
+<table class="table striped" id="customer-orders">
+    <thead>
+        <tr>
+            <th class="text-left">Name</th>
+            <th class="text-left">Data</th>
+            <th class="text-left">State</th>
+     </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+    <tfoot></tfoot>
+</table>
+@section left {
+    @Html.Partial("_navigation")
+}
+@section right {
+    @Html.Partial("_schedule")
+}
+@section scripts {
+
+    <script type="text/javascript">
+
+    $(function () {
+
+        $.getJSON('@Html.Raw(Url.Action("Page", "CustomerOrdersQueries", new { pageNumber = 0, pageSize = 25 }))')
+            .complete(function (response) {
+                var tbody = $("#customer-orders tbody");
+                $(response.responseJSON.content).each(function (i, item) {
+                    var tr = _.template("<tr><td><%= item.ModelReferenceName %></td><td><%= item.Timestamp %></td><td><%= item.State %></td></tr>", { item: item });
+                    tbody.append(tr);
+                });
+            });
+
+    });
+    </script>
+
+}

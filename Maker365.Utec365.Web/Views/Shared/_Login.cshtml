@@ -1,0 +1,6 @@
+﻿@using Microsoft.AspNet.Identity
+<a class="dropdown-toggle" href="#">@("Hello " + User.Identity.GetUserName() + "!")</a>
+<ul class="dropdown-menu place-right" data-show="hover" data-role="dropdown">
+    <li>@Html.ActionLink("Portal", "Index", "Portal", routeValues: null, htmlAttributes: new { title = "Portal" })</li>
+    <li>@Html.ActionLink("Log Off", "LogOff", "Account")</li>
+</ul>

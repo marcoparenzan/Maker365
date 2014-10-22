@@ -1,0 +1,52 @@
+﻿<h1>
+    Customer orders
+</h1>
+<table class="table striped" id="customer-orders">
+    <thead>
+        <tr>
+            <th class="text-left">Customer</th>
+            <th class="text-left">Name</th>
+            <th class="text-left">Data</th>
+            <th class="text-left">State</th>
+            <th class="text-left"></th>
+     </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+    <tfoot></tfoot>
+</table>
+@section left {
+    @Html.Partial("_navigation")
+}
+@section right {
+
+}
+@section scripts {
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            $.getJSON('@Html.Raw(Url.Action("Page", "UtecCustomerOrdersQueries", new { pageNumber = 0, pageSize = 25 }))')
+                .complete(function (response) {
+                    var tbody = $("#customer-orders tbody");
+                    $(response.responseJSON.content).each(function (i, item) {
+                        var tr = _.template("<tr><td><%= item.PartitionKey %></td><td><%= item.ModelReferenceName %></td><td><%= item.Timestamp %></td><td><%= item.State %></td><td><a href='#' class='view-customer-order button primary' data-partition-key='<%= item.PartitionKey %>' data-model-reference-name='<%= item.ModelReferenceName %>'>View</a></td></tr>", { item: item });
+                        tbody.append(tr);
+                    });
+                    $(".view-customer-order.button").click(function (e) {
+                        var partitionKey = $(e.target).attr("data-partition-key");
+                        var modelReferenceName = $(e.target).attr("data-model-reference-name");
+                        var url = '@Html.Raw(Url.Action("ManageCustomerOrder", "Portal", new { partitionKey = "__partitionKey__", modelReferenceName = "__modelReferenceName__" }))';
+                        url = url.replace("__partitionKey__", partitionKey);
+                        url = url.replace("__modelReferenceName__", modelReferenceName);
+
+                        window.location.href = url;
+                    });
+                });
+
+    });
+    </script>
+
+}

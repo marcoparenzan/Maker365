@@ -1,0 +1,30 @@
+﻿@model Maker365.Portal365.Web.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl }))
+    {
+        @Html.AntiForgeryToken()
+        <div id="socialLoginList">
+                @foreach (AuthenticationDescription p in loginProviders)
+                {
+                    switch (p.Caption)
+                    {
+                        case "Microsoft":
+                            <button type="submit" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" class="tile metro bg-blue">
+                                <span class="icon-windows"></span>Microsoft
+                            </button>
+                            break;
+                        default:
+                            <div class="tile bg-lightBlue ol-transparent">
+                                <div class="tile-content icon">
+                                    <button type="submit" class="btn" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
+                                </div>
+                            </div>
+                            break;
+                    }
+                }
+        </div>
+    }
+}

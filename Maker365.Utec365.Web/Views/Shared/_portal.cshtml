@@ -1,0 +1,99 @@
+﻿@using Microsoft.AspNet.Identity
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="product" content="Utec 365">
+    <meta name="description" content="Utec 365">
+    <meta name="author" content="Marco Parenzan">
+
+    <link href="~/Content/metro-bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/iconFont.css" rel="stylesheet" />
+    <link href="~/Content/portal.css" rel="stylesheet" />
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    @RenderSection("css", false)
+
+    <title>Utec 365</title>
+</head>
+<body class="metro">
+    <header>
+        <div class="navigation-bar light">
+            <div class="navigation-bar-content container">
+                <ul>
+                    <li class="element">
+                        Utec <sup>365</sup>
+                    </li>
+                    <li class="element place-right">
+                        @Html.Partial("_login")
+                    </li>
+                    <li class="element place-right">
+                        @Html.Partial("_search")
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <div class="grid fluid">
+            <div class="row">
+                <div class="span2">
+                    @RenderSection("left", false)
+                </div>
+                <div class="span8">
+                    @RenderBody()
+                </div>
+                <div class="span2">
+                    @RenderSection("right", false)
+                </div>
+       </div>
+        </div>
+    </div> 
+
+    <script src="~/Scripts/lodash.js"></script>
+    <script src="~/Scripts/jquery-2.1.1.js"></script>
+    <script src="~/Scripts/jquery.widget.min.js"></script>
+    <script src="~/Scripts/jquery.mousewheel.js"></script>
+    <script src="~/Scripts/Metro/metro-loader.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.1.2.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script type="text/javascript">
+
+        // https://github.com/CodeSeven/toastr
+
+        function info_to_server(message) {
+            chat.server.info(name, message);
+        }
+
+        $(function () {
+
+            // Declare a proxy to reference the hub.
+            var clientHub = $.connection.clientHub;
+            // Create a function that the hub can call to broadcast messages.
+
+            clientHub.client.info = function (message) {
+                toastr.info(message)
+            };
+
+            clientHub.client.success = function (message) {
+                toastr.options.newestOnTop = false;
+                toastr.success(message)
+            };
+
+            clientHub.client.warning = function (message) {
+                toastr.warning(message)
+            };
+
+            clientHub.client.error = function (message) {
+                toastr.error(message)
+            };
+
+            $.connection.hub.start().done(function () {
+            });
+        });
+    </script>
+    @RenderSection("scripts", false)
+
+</body>
+</html>

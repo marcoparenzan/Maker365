@@ -1,0 +1,23 @@
+﻿<h1>
+    Place new order
+</h1>
+<form class="form new-order dropzone" method="post" action="~/CustomerOrdersRepository/NewOrder" enctype="multipart/form-data">
+    <fieldset>
+        <label>Order reference</label>
+        <div class="input-control text" data-role="input-control">
+            <input type="text" placeholder="Order reference" name="ModelReferenceName">
+        </div>
+    </fieldset>
+</form>
+@section css {
+    <link href="~/Scripts/dropzone/css/dropzone.css" rel="stylesheet" />
+}
+@section left {
+    @Html.Partial("_navigation")
+}
+@section right {
+    @Html.Partial("_schedule")
+}
+@section scripts {
+    <script src="~/Scripts/dropzone/dropzone.js"></script>
+}

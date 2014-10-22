@@ -1,0 +1,48 @@
+﻿<h1>
+    Orders
+</h1>
+<table class="table striped" id="customers">
+    <thead>
+        <tr>
+            <th class="text-left">Model Reference Name</th>
+            <th class="text-left">Customer Name</th>
+            <th class="text-left"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+    <tfoot></tfoot>
+</table>
+@section left {
+    @Html.Partial("_navigation")
+}
+@section right {
+
+}
+@section scripts {
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            $.getJSON('@Html.Raw(Url.Action("Files", "Office365Sharepoint"))')
+                .complete(function (response) {
+                    var tbody = $("#customers tbody");
+                    $(response.responseJSON).each(function (i, item) {
+                        var tr = _.template("<tr><td><%= item.Name %></td><td><%= '' %></td><td><a href='#' class='view-customer button primary' data-display-name='<%= item.DisplayName %>' data-name='<%= item.Name %>'>View</a></td></tr>", { item: item });
+                        tbody.append(tr);
+                    });
+                    $(".view-customer.button").click(function (e) {
+                        var name = $(e.target).attr("data-name");
+                        var url = '@Html.Raw(Url.Action("ManageOrder", "Portal", new { name = "__name__" }))';
+                        url = url.replace("__name__", name);
+
+                        window.location.href = url;
+                    });
+                });
+
+    });
+    </script>
+
+}

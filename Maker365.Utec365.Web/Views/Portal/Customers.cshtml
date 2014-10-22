@@ -1,0 +1,49 @@
+﻿<h1>
+    Customers
+</h1>
+<table class="table striped" id="customers">
+    <thead>
+        <tr>
+            <th class="text-left">Customer</th>
+            <th class="text-left">EMail</th>
+            <th class="text-left">Phone</th>
+            <th class="text-left"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+    </tbody>
+    <tfoot></tfoot>
+</table>
+@section left {
+    @Html.Partial("_navigation")
+}
+@section right {
+
+}
+@section scripts {
+    <script type="text/javascript">
+
+        $(function () {
+
+
+            $.getJSON('@Html.Raw(Url.Action("Contacts", "Office365Exchange"))')
+                .complete(function (response) {
+                    var tbody = $("#customers tbody");
+                    $(response.responseJSON).each(function (i, item) {
+                        var tr = _.template("<tr><td><%= item.DisplayName %></td><td><%= item.EmailAddresses[0].Address %></td><td><%= item.BusinessPhones[0] %></td><td><a href='#' class='view-customer button primary' data-display-name='<%= item.DisplayName %>' data-display-name='<%= item.DisplayName %>'>View</a></td></tr>", { item: item });
+                        tbody.append(tr);
+                    });
+                    $(".view-customer.button").click(function (e) {
+                        var displayName = $(e.target).attr("data-display-name");
+                        var url = '@Html.Raw(Url.Action("ManageCustomer", "Portal", new { displayName = "__displayName__" }))';
+                        url = url.replace("__displayName__", displayName);
+
+                        window.location.href = url;
+                    });
+                });
+
+    });
+    </script>
+
+}

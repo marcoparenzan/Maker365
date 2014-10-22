@@ -1,0 +1,8 @@
+﻿.metro .grid .row {
+    display: block;
+    margin-top: 0px;
+}
+
+ul, menu, dir {
+    -webkit-margin-before: 0px;
+}

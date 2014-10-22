@@ -1,0 +1,46 @@
+﻿<h1>
+    Calendar
+</h1>
+<div class="planning"></div>
+@section css {
+<link href="~/Scripts/fullcalendar-2.1.1/fullcalendar.css" rel="stylesheet" />
+}
+@section left {
+    @Html.Partial("_navigation")
+}
+@section right {
+
+}
+@section scripts {
+    <script src="~/Scripts/fullcalendar-2.1.1/lib/moment.min.js"></script>
+    <script src="~/Scripts/fullcalendar-2.1.1/fullcalendar.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+
+            var cal = $(".planning").fullCalendar({
+                events: function (start, end, timezone, callback) {
+
+                    $.getJSON('@Url.Action("Calendar", "Office365Exchange", new {})')
+                    .success(function (events) {
+
+                        callback(_.map(events, function (item) {
+
+                            return {
+                                start:item.Start
+                                ,
+                                end: item.End
+                                ,
+                                title:item.Subject
+                            };
+
+                        }));
+
+                    });
+                }
+            });
+
+         });
+    </script>
+
+}
